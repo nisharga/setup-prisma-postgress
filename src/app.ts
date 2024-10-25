@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import express, { Application, NextFunction, Request, Response } from 'express'
 import path from 'path' 
 import { globalErrorHandler } from './app/middlewares'
+import router from './app/routes'
  
 
 dotenv.config()
@@ -31,7 +32,7 @@ app.get('/', async (req, res) => {
   })
 })
 
-// app.use('/api/v1', router)
+app.use('/api/v1', router)
 
 app.use('/uploads', express.static(path.join('uploads')))
 app.use((req: Request, res: Response, next: NextFunction) => {

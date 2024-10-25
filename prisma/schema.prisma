@@ -1,4 +1,6 @@
 // This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
@@ -11,12 +13,13 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
-  output          = "../../node_modules/.prisma/client"
 }
 
-model Test {
-  id    String @id @default(uuid())
-  label String
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
 
-  @@map("test")
+  @@map("users")
 }
