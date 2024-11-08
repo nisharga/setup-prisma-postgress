@@ -50,6 +50,18 @@ class Controller extends BaseController {
         data: result,
       })
     })
+
+    verifyEmail = this.catchAsync(async (req: Request, res: Response) => {
+      const { token } = req.query || ''
+      const result = await AuthService.verifyEmail(token as string)
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Email Verified successfully !',
+        data: result,
+      })
+    })
+  
 }
 
 export const AuthController = new Controller();

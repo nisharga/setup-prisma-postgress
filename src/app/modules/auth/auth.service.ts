@@ -112,6 +112,39 @@ class Service {
     })
     return resetPassword
   }
+
+  async verifyEmail(token: string) {
+    const user = jwtHelpers.verifyToken(
+      token,
+      config.email_verify_token as string,
+    )
+
+
+    if (!user) {
+      throw new ApiError(httpStatus.FORBIDDEN, 'Invalid token provided')
+    }
+    await prisma.user.findUniqueOrThrow({
+      where: {
+        email: user.email,
+      },
+    })
+    const result = await prisma.user.update({
+      where: {
+        email: user.email,
+      },
+      data: {
+        isVerified: true,
+      },
+      select: {
+        name: true, 
+        email: true,
+        isVerified: true,
+        password: false,
+      },
+    })
+    return result
+  }
+
 }
 export const AuthService = new Service()
 
