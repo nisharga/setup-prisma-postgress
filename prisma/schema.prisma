@@ -15,11 +15,21 @@ generator client {
   previewFeatures = ["prismaSchemaFolder"]
 }
 
-model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
+enum Role {
+  USER
+  AGENT
+  SUPER_ADMIN
+}
 
+model User {
+  id         String  @id @default(uuid())
+  name       String
+  email      String  @unique
+  password   String
+  role       Role    @default(USER)
+  imageUrl   String?
+  isVerified Boolean @default(false)
+
+  @@index([id])
   @@map("users")
 }

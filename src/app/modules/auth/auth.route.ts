@@ -1,8 +1,20 @@
 import express from "express";
 import { AuthController } from "./auth.controller";
+import validateRequest from "../../middlewares/validateRequest";
+import { authValidations } from "./auth.validation";
 
 const router = express.Router();
 
-router.post('/register', AuthController.register);
+router.post(
+    '/register',
+    validateRequest(authValidations.userRegisterSchemaValidation),
+    AuthController.register,
+  )
+  
+  router.post(
+    '/login',
+    validateRequest(authValidations.userLoginValidation),
+    AuthController.loginUser,
+  )
 
 export const authRoutes = router;

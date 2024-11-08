@@ -14,4 +14,24 @@ export default {
   reset_pass_token: process.env.RESET_PASS_TOKEN,
   reset_pass_link: process.env.RESET_PASSWORD_LINK,
   reset_pass_exp: process.env.RESET_PASS_EXP,
+  email_verify_token: process.env.VERIFY_EMAIL_TOKEN,
+  email_verify_exp: process.env.VERIFY_EMAIL_EXP,
+  node_env: process.env.NODE_ENV,
+  verify_link: {
+    user_verify_link: process.env.USER_FRONTEND_URL,
+    agent_verify_link: process.env.AGENT_FRONTEND_URL,
+    admin_verify_link: process.env.ADMIN_FRONTEND_URL,
+    user_production_url: process.env.USER_FRONTEND_PRODUCTION_URL,
+    agent_production_url: process.env.AGENT_FRONTEND_PRODUCTION_URL,
+    admin_production_url: process.env.ADMIN_FRONTEND_PRODUCTION_URL,
+  },
+
+  // all mail-services
+  app_host: process.env.APP_HOST,
+  app_port: process.env.APP_PORT,
+  app_email: process.env.APP_EMAIL,
+  app_pass: process.env.APP_PASS, 
+  email_from: process.env.EMAIL_FROM,
+  app_user: process.env.APP_NAME,
+  
 }
