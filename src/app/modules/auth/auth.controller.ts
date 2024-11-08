@@ -29,6 +29,27 @@ class Controller extends BaseController {
           data: result,
         })
       })
+
+    forgotPassword = this.catchAsync(async (req: Request, res: Response) => {
+      const result = await AuthService.forgotPassword(req.body)
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Check your Email to reset your password',
+        data: result,
+      })
+    })
+  
+    resetPassword = this.catchAsync(async (req: Request, res: Response) => {
+      const { token } = req.query || ''
+      const result = await AuthService.resetPassword(token as string, req.body)
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Password reset successfully ',
+        data: result,
+      })
+    })
 }
 
 export const AuthController = new Controller();
