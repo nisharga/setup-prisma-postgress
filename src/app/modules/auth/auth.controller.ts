@@ -61,7 +61,53 @@ class Controller extends BaseController {
         data: result,
       })
     })
+
+    refreshToken = this.catchAsync(async (req: Request, res: Response) => {
+      const { refreshToken } = req.cookies || ''
+      const result = await AuthService.refreshToken(refreshToken as string)
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: 'Generate new tokens successfully!',
+        data: result,
+      })
+    })
   
+    decodedToken = this.catchAsync(async (req: Request, res: Response) => {
+      const token = req?.headers?.authorization || ''
+      const result = await AuthService.decodedUser(token)
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: 'Token Decoded successfully!',
+        data: result,
+      })
+    })
+  
+    changePassword = this.catchAsync(async (req, res, next) => {
+      const result = await AuthService.changePassword(req.id as string, req.body)
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Password changed successfully!',
+        data: result,
+      })
+    })
+  
+    socialLogin = this.catchAsync(async (req, res, next) => {
+      const result = await AuthService.socialLogin(req.body)
+      const { refreshToken } = result
+      res.cookie('refreshToken', refreshToken, {
+        secure: false,
+        httpOnly: true,
+      })
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'User logged in successfully!',
+        data: result,
+      })
+    })
 }
 
 export const AuthController = new Controller();
