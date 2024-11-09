@@ -8,6 +8,7 @@ import { User } from "@prisma/client"
 import { jwtHelpers } from "../../helpers"
 import config from "../../../config"
 import { JwtPayload } from "jsonwebtoken"
+import { CloudinaryResponse, sendImageToCloudinary } from "../../shared"
 
 class Service {
   async registerUser(payload: User) {
@@ -226,6 +227,40 @@ class Service {
       },
     })
     return generateTokens(newUser)
+  }
+
+  async updateProfile(
+    updateData: any,
+    userId: string,
+    imageUrl: string
+  ) { 
+
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    }) 
+ 
+    const publicImg = `${userId}-${user.name}`
+
+    if (imageUrl) {
+      const imageUrlLink = await sendImageToCloudinary(publicImg, imageUrl)
+      updateData.imageUrl = (imageUrlLink as CloudinaryResponse).secure_url 
+    }
+ 
+    try {  
+        const result = await prisma.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            ...updateData
+          },
+        })
+        return result 
+    } catch (error: any) {
+      throw new ApiError(httpStatus.NOT_FOUND, error.message)
+    }
   }
 
 }

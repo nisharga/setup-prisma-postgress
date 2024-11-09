@@ -108,6 +108,25 @@ class Controller extends BaseController {
         data: result,
       })
     })
+
+    updateProfile = this.catchAsync(async (req, res, next) => {
+      const userId = req.id
+      const updateData = req.body
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] }
+      const imageUrl = files.imageUrl ? files.imageUrl[0].path : null 
+  
+      const result = await AuthService.updateProfile(
+        updateData,
+        userId as string,
+        imageUrl as string
+      )
+      this.sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Profile Update successfully !',
+        data: result,
+      })
+    }) 
 }
 
 export const AuthController = new Controller();

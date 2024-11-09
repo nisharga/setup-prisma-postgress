@@ -1,10 +1,11 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { AuthController } from "./auth.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { authValidations } from "./auth.validation";
 import validateAuthorization from "../../middlewares/validateAuthorization";
 import { Role } from "@prisma/client";
 import verifyToken from "../../middlewares/verifyToken";
+import upload from "../../middlewares/fileUpload";
 
 const router = express.Router();
 
@@ -51,5 +52,19 @@ router.post(
   )
 
   router.post('/social-login', AuthController.socialLogin)
+
+  router.patch(
+    '/update',
+    verifyToken,
+    validateAuthorization([Role.SUPER_ADMIN, Role.USER, Role.AGENT]),
+    upload.fields([
+      { name: 'imageUrl', maxCount: 1 }
+    ]),
+    (req: Request, res: Response, next: NextFunction) => {
+      req.body = JSON.parse(req.body.data)
+      next()
+    }, 
+    AuthController.updateProfile,
+  )
 
 export const authRoutes = router;
